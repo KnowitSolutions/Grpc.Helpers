@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Correlation", "Grpc.Correlation\Grpc.Correlation.csproj", "{A1EFAD6C-07DB-4674-BB53-C9A236C17750}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Correlation.Tests", "Grpc.Correlation.Tests\Grpc.Correlation.Tests.csproj", "{15A83E3B-D48A-42A2-BB7C-F261094510F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Testing", "Grpc.Testing\Grpc.Testing.csproj", "{0CA215C8-CEAE-4195-84B6-DED787E6D36C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1EFAD6C-07DB-4674-BB53-C9A236C17750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1EFAD6C-07DB-4674-BB53-C9A236C17750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1EFAD6C-07DB-4674-BB53-C9A236C17750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1EFAD6C-07DB-4674-BB53-C9A236C17750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A83E3B-D48A-42A2-BB7C-F261094510F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A83E3B-D48A-42A2-BB7C-F261094510F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A83E3B-D48A-42A2-BB7C-F261094510F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A83E3B-D48A-42A2-BB7C-F261094510F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CA215C8-CEAE-4195-84B6-DED787E6D36C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CA215C8-CEAE-4195-84B6-DED787E6D36C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CA215C8-CEAE-4195-84B6-DED787E6D36C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CA215C8-CEAE-4195-84B6-DED787E6D36C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
