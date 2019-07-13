@@ -4,6 +4,6 @@ namespace Grpc.Correlation
 {
     public class CorrelationId
     {
-        public Guid Value { get; set; }
+        public Guid Value { get; internal set; }
     }
 }
