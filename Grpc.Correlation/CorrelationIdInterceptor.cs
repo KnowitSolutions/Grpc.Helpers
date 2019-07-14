@@ -6,7 +6,7 @@ using Grpc.Core.Interceptors;
 
 namespace Grpc.Correlation
 {
-    public class CorrelationIdInterceptor : Interceptor
+    internal class CorrelationIdInterceptor : Interceptor
     {
         private static readonly string HeaderName = "X-CorrelationId".ToLower();
         private readonly CorrelationId _correlationId;
