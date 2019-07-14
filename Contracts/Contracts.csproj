@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.9.0" />
+        <PackageReference Include="Grpc.Core" Version="1.22.0" />
+        <PackageReference Include="Grpc.Tools" Version="1.22.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Dummy.proto" />
+    </ItemGroup>
+
+</Project>

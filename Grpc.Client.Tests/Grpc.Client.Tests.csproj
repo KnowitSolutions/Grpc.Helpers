@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Contracts\Contracts.csproj" />
-      <ProjectReference Include="..\Grpc.Correlation\Grpc.Correlation.csproj" />
+      <ProjectReference Include="..\Grpc.Client\Grpc.Client.csproj" />
       <ProjectReference Include="..\Grpc.Testing\Grpc.Testing.csproj" />
     </ItemGroup>
 

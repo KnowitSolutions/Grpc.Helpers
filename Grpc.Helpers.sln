@@ -6,6 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Correlation.Tests", "G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Testing", "Grpc.Testing\Grpc.Testing.csproj", "{0CA215C8-CEAE-4195-84B6-DED787E6D36C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Client", "Grpc.Client\Grpc.Client.csproj", "{88786D67-190B-441E-9C58-8BB67FF3A6D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Client.Tests", "Grpc.Client.Tests\Grpc.Client.Tests.csproj", "{243C8E76-DA23-4033-A4B0-8B28BAEBDFEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{CF19684B-6059-4DA3-BF5A-48443D16ED29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,17 @@ Global
 		{0CA215C8-CEAE-4195-84B6-DED787E6D36C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CA215C8-CEAE-4195-84B6-DED787E6D36C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CA215C8-CEAE-4195-84B6-DED787E6D36C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88786D67-190B-441E-9C58-8BB67FF3A6D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88786D67-190B-441E-9C58-8BB67FF3A6D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88786D67-190B-441E-9C58-8BB67FF3A6D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88786D67-190B-441E-9C58-8BB67FF3A6D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{243C8E76-DA23-4033-A4B0-8B28BAEBDFEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{243C8E76-DA23-4033-A4B0-8B28BAEBDFEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{243C8E76-DA23-4033-A4B0-8B28BAEBDFEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{243C8E76-DA23-4033-A4B0-8B28BAEBDFEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF19684B-6059-4DA3-BF5A-48443D16ED29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF19684B-6059-4DA3-BF5A-48443D16ED29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF19684B-6059-4DA3-BF5A-48443D16ED29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF19684B-6059-4DA3-BF5A-48443D16ED29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

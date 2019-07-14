@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace Grpc.Correlation.Tests
 {
-    public class Tests : SideChannelServiceTests<Test.TestClient, TestService>
+    public class Tests : SideChannelServiceTests<Dummy.DummyClient, Service>
     {
         private Guid CorrelationId => Services.GetService<CorrelationId>().Value;
 
@@ -41,12 +41,12 @@ namespace Grpc.Correlation.Tests
         }
     }
     
-    public class TestService : Test.TestBase
+    public class Service : Dummy.DummyBase
     {
         private readonly CorrelationId _correlationId;
         private readonly dynamic _sideChannel;
         
-        public TestService(CorrelationId correlationId, dynamic sideChannel)
+        public Service(CorrelationId correlationId, dynamic sideChannel)
         {
             _correlationId = correlationId;
             _sideChannel = sideChannel;
