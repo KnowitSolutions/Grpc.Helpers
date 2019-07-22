@@ -15,6 +15,9 @@ namespace Grpc.Correlation
             
             services.AddScoped<CorrelationId>();
             services.AddScoped<Interceptor, CorrelationIdInterceptor>();
+
+            services.AddHttpContextAccessor();
+            services.AddSingleton<CorrelationIdLogEventEnricher>();
         }
     }
 }
