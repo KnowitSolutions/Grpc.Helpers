@@ -1,6 +1,8 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 
-service Dummy {
-    rpc Test (google.protobuf.Empty) returns (google.protobuf.Empty);
+service Echo {
+    rpc Empty (google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc Bytes (google.protobuf.BytesValue) returns (google.protobuf.BytesValue);
 }

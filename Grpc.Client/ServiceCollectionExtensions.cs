@@ -60,9 +60,12 @@ namespace Grpc.Client
                 var snapshot = provider.GetService<IOptionsSnapshot<GrpcClientOptions>>();
                 var grpcOptions = snapshot.Get(name);
 
-                var address = new Regex(@"^(?!\w+:\/\/)")
-                    .Replace(grpcOptions.Address, "http://");
-                options.BaseAddress = new Uri(address);
+                if (grpcOptions.Address != null)
+                {
+                    var address = new Regex(@"^(?!\w+:\/\/)")
+                        .Replace(grpcOptions.Address, "http://");
+                    options.BaseAddress = new Uri(address);
+                }
 
                 action(options);
             });

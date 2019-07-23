@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace Grpc.Correlation.Tests
 {
-    public class Tests : SideChannelServiceTests<Dummy.DummyClient, Service>
+    public class Tests : SideChannelServiceTests<Echo.EchoClient, Service>
     {
         private Guid CorrelationId => Services.GetService<CorrelationId>().Value;
 
@@ -17,7 +17,7 @@ namespace Grpc.Correlation.Tests
         public void TestBlockingInterception()
         {
             Assert.AreEqual(Guid.Empty, CorrelationId);
-            Client.Test(new Empty());
+            Client.Empty(new Empty());
             Assert.AreEqual(SideChannel.correlationId, CorrelationId);
         }
 
@@ -25,7 +25,7 @@ namespace Grpc.Correlation.Tests
         public async Task TestAsyncInterception()
         {
             Assert.AreEqual(Guid.Empty, CorrelationId);
-            await Client.TestAsync(new Empty());
+            await Client.EmptyAsync(new Empty());
             Assert.AreEqual(SideChannel.correlationId, CorrelationId);
         }
 
@@ -41,7 +41,7 @@ namespace Grpc.Correlation.Tests
         }
     }
     
-    public class Service : Dummy.DummyBase
+    public class Service : Echo.EchoBase
     {
         private readonly CorrelationId _correlationId;
         private readonly dynamic _sideChannel;
@@ -52,10 +52,10 @@ namespace Grpc.Correlation.Tests
             _sideChannel = sideChannel;
         }
 
-        public override Task<Empty> Test(Empty request, ServerCallContext context)
+        public override Task<Empty> Empty(Empty request, ServerCallContext context)
         {
             _sideChannel.correlationId = _correlationId.Value;
-            return Task.FromResult(new Empty());
+            return Task.FromResult(request);
         }
     }
 }

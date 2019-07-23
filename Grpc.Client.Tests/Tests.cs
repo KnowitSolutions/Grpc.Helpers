@@ -13,7 +13,7 @@ namespace Grpc.Client.Tests
         [Test]
         public void TestClientExists()
         {
-            Services.GetRequiredService<Dummy.DummyClient>();
+            Services.GetRequiredService<Echo.EchoClient>();
         }
 
         [TestCase("DummyClient", ExpectedResult = "dummy.address")]
@@ -39,9 +39,9 @@ namespace Grpc.Client.Tests
         protected override void ConfigureServices(IServiceCollection services)
         {
             base.ConfigureServices(services);
-            services.AddGrpcClientConfiguration<Dummy.DummyClient>();
-            services.AddGrpcClientConfiguration<Dummy.DummyClient>("Named");
-            services.AddGrpcClientConfiguration<Dummy.DummyClient>("Structured");
+            services.AddGrpcClientConfiguration<Echo.EchoClient>();
+            services.AddGrpcClientConfiguration<Echo.EchoClient>("Named");
+            services.AddGrpcClientConfiguration<Echo.EchoClient>("Structured");
         }
     }
 }
