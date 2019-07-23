@@ -19,7 +19,7 @@ namespace Grpc.Testing
         [SetUp]
         public void SetupClient()
         {
-            Client = Services.GetService<TClient>();
+            Client = Services.GetRequiredService<TClient>();
         }
 
         protected override void Configure(IApplicationBuilder app)

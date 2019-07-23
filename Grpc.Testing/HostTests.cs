@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace Grpc.Testing
@@ -18,7 +19,7 @@ namespace Grpc.Testing
         private IHost _host;
         private IServerAddressesFeature _addresses;
         private IServiceScope _scope;
-        
+
         protected IPEndPoint EndPoint { get; private set; }
         protected IServiceProvider Services { get; private set; }
 
@@ -30,11 +31,12 @@ namespace Grpc.Testing
                 .ConfigureWebHostDefaults(builder => builder
                     .Configure(Configure)
                     .ConfigureAppConfiguration(ConfigureAppConfiguration)
+                    .ConfigureLogging(ConfigureLogging)
                     .ConfigureServices(ConfigureServices)
                     .ConfigureKestrel(ConfigureKestrel))
                 .Build();
             await _host.StartAsync();
-            
+
             var port = _addresses.Addresses.Select(address => new Uri(address).Port).First();
             EndPoint = new IPEndPoint(IPAddress.Loopback, port);
         }
@@ -67,13 +69,19 @@ namespace Grpc.Testing
         {
         }
 
+        private static void ConfigureLogging(ILoggingBuilder logging)
+        {
+            logging.SetMinimumLevel(LogLevel.Trace);
+            logging.AddConsole();
+        }
+
         protected virtual void ConfigureServices(IServiceCollection services)
         {
         }
 
-        private static void ConfigureKestrel(KestrelServerOptions options)
+        protected virtual void ConfigureKestrel(KestrelServerOptions options)
         {
-            options.Listen(IPAddress.Loopback, 0, 
+            options.Listen(IPAddress.Loopback, 0,
                 listenOptions => listenOptions.Protocols = HttpProtocols.Http2);
         }
     }
