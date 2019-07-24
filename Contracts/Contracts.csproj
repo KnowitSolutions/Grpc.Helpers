@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="Dummy.proto" />
+        <Protobuf Include="Echo.proto" />
     </ItemGroup>
 
 </Project>

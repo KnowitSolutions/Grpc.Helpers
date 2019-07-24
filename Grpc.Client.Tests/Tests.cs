@@ -16,9 +16,9 @@ namespace Grpc.Client.Tests
             Services.GetRequiredService<Echo.EchoClient>();
         }
 
-        [TestCase("DummyClient", ExpectedResult = "dummy.address")]
-        [TestCase("DummyClient, Named", ExpectedResult = "named.address")]
-        [TestCase("DummyClient, Structured", ExpectedResult = "structured.address")]
+        [TestCase("EchoClient", ExpectedResult = "echo.address")]
+        [TestCase("EchoClient, Named", ExpectedResult = "named.address")]
+        [TestCase("EchoClient, Structured", ExpectedResult = "structured.address")]
         public string TestClientAddress(string name)
         {
             var snapshot = Services.GetService<IOptionsSnapshot<GrpcClientFactoryOptions>>();
@@ -30,7 +30,7 @@ namespace Grpc.Client.Tests
         {
             configuration.AddInMemoryCollection(new Dictionary<string, string>
             {
-                {"Grpc:Clients:Dummy", "dummy.address"},
+                {"Grpc:Clients:Echo", "echo.address"},
                 {"Grpc:Clients:Named", "named.address"},
                 {"Grpc:Clients:Structured:Address", "structured.address"}
             });
