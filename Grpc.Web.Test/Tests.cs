@@ -11,12 +11,17 @@ using Grpc.Core;
 using Grpc.Testing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace Grpc.Web.Test
 {
     public class Tests : ServiceTests<Echo.EchoClient, Service>
     {
+        // TODO: Unit test
+        // TODO: Exception handling
+        // TODO: Refactor client
+        
         [Test]
         public async Task TestEmpty()
         {
@@ -125,6 +130,12 @@ namespace Grpc.Web.Test
         {
             app.UseGrpcWeb();
             base.Configure(app);
+        }
+
+        protected override void ConfigureServices(IServiceCollection services)
+        {
+            base.ConfigureServices(services);
+            services.AddGrpcWeb();
         }
 
         protected override void ConfigureKestrel(KestrelServerOptions options)

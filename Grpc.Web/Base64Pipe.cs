@@ -1,17 +1,13 @@
 using System;
 using System.IO.Pipelines;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace Grpc.Web
 {
-    internal class GrpcWebResponseEncoder
+    internal class Base64Pipe
     {
-        private static readonly byte[] Trailers = {0x80};
-
-        public static async Task<long> EncodeBase64(PipeReader input, PipeWriter output)
+        public static async Task<long> Encode(PipeReader input, PipeWriter output)
         {
             long length = 0;
             ReadResult result;
@@ -43,31 +39,40 @@ namespace Grpc.Web
 
             return length;
         }
-
-        private static async Task EncodeMeta(PipeWriter output, byte[] type, uint length)
+        
+        public static async Task<long> Decode(PipeReader input, PipeWriter output)
         {
-            var size = BitConverter.GetBytes(length);
-            if (BitConverter.IsLittleEndian)
+            long length = 0;
+            ReadResult result;
+            do
             {
-                Array.Reverse(size);
-            }
+                result = await input.ReadAsync();
+                
+                var size = result.Buffer.Length - (result.IsCompleted ? 0 : result.Buffer.Length % 4);
+                var buffer = result.Buffer.Slice(0, size);
+                var chars = new char[size];
 
-            await output.WriteAsync(type);
-            await output.WriteAsync(size);
-        }
+                var idx = 0;
+                foreach (var slice in buffer)
+                {
+                    Encoding.ASCII.GetChars(slice.Span, chars.AsSpan(idx, slice.Length));
+                    idx += slice.Length;
+                }
 
-        public static async Task<long> EncodeTrailers(IHeaderDictionary trailers, PipeWriter output)
-        {
-            var trailerStrings = trailers.Select(trailer => $"{trailer.Key}: {trailer.Value}");
-            var trailerBlock = string.Join("\r\n", trailerStrings) + "\r\n\r\n";
-            var trailerBytes = Encoding.ASCII.GetBytes(trailerBlock);
-            
-            var pipe = new Pipe();
-            await EncodeMeta(pipe.Writer, Trailers, (uint) trailerBytes.Length);
-            await pipe.Writer.WriteAsync(trailerBytes);
-            pipe.Writer.Complete();
+                for (; idx < chars.Length; idx++)
+                {
+                    chars[idx] = '=';
+                }
+                
+                var bytes = Convert.FromBase64CharArray(chars, 0, chars.Length);
+                length += bytes.Length;
 
-            return await EncodeBase64(pipe.Reader, output);
+                input.AdvanceTo(buffer.End);
+                await output.WriteAsync(bytes);
+                await output.FlushAsync();
+            } while (!result.IsCompleted);
+
+            return length;
         }
     }
 }

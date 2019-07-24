@@ -1,5 +1,3 @@
-using System.IO.Pipelines;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -15,13 +13,21 @@ namespace Grpc.Web
 
         private readonly RequestDelegate _next;
         private readonly ILogger<GrpcWebMiddleware> _logger;
+        private readonly Base64Transcoder _base64Transcoder;
+        private readonly BinaryTranscoder _binaryTranscoder;
 
         public IHeaderDictionary Trailers { get; set; } = new HeaderDictionary();
 
-        public GrpcWebMiddleware(RequestDelegate next, ILogger<GrpcWebMiddleware> logger)
+        public GrpcWebMiddleware(
+            RequestDelegate next,
+            ILogger<GrpcWebMiddleware> logger,
+            Base64Transcoder base64Transcoder,
+            BinaryTranscoder binaryTranscoder)
         {
             _next = next;
             _logger = logger;
+            _base64Transcoder = base64Transcoder;
+            _binaryTranscoder = binaryTranscoder;
         }
 
         public async Task Invoke(HttpContext context)
@@ -36,14 +42,12 @@ namespace Grpc.Web
 
                 if (isText)
                 {
-                    await Intercept(context, format);
+                    await Intercept(context, format, _base64Transcoder);
                 }
                 else
                 {
-                    context.Response.StatusCode = (int) HttpStatusCode.NotImplemented;
-                    _logger.LogWarning(
-                        "Unimplemented: Rejecting binary encoded gRPC Web request to {Uri}",
-                        context.Request.Path.Value);
+                    
+                    await Intercept(context, format, _binaryTranscoder);
                 }
             }
             else
@@ -52,39 +56,16 @@ namespace Grpc.Web
             }
         }
 
-        private async Task Intercept(HttpContext context, string format)
+        private async Task Intercept(HttpContext context, string format, ITranscoder transcoder)
         {
-            var requestPipe = new Pipe();
-            var responsePipe = new Pipe();
-
             context.Features.Set<IHttpResponseTrailersFeature>(this);
             context.Request.ContentType = "application/grpc" + (format != null ? $"+{format}" : "");
-            var requestReader = context.Request.BodyReader;
-            context.Request.Body = requestPipe.Reader.AsStream();
-            var responseWriter = context.Response.BodyWriter;
-            var responseBody = context.Response.Body;
-            context.Response.Body = responsePipe.Writer.AsStream();
 
-            var decode = GrpcWebRequestDecoder.DecodeBase64(requestReader, requestPipe.Writer);
-            var next = _next(context);
-            var encode = GrpcWebResponseEncoder.EncodeBase64(responsePipe.Reader, responseWriter);
-
-            var requestLength = await decode;
-            _logger.LogTrace("Decoded request with {Length} bytes", requestLength);
-
-            requestPipe.Writer.Complete();
-            await next;
-            responsePipe.Writer.Complete();
-
-            var responseLength = await encode;
-            _logger.LogTrace("Encoded response with {Length} bytes", responseLength);
-
-            context.Response.Body = responseBody;
+            await transcoder.TranscodeStream(_next);
             if (Trailers.Count > 0)
             {
                 _logger.LogDebug("Adding trailers");
-                var trailersLength = await GrpcWebResponseEncoder.EncodeTrailers(Trailers, context.Response.BodyWriter);
-                _logger.LogTrace("Encoded trailers with {Length} bytes", trailersLength);
+                await transcoder.TranscodeTrailers(Trailers);
             }
             else
             {
