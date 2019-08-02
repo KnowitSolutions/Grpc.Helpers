@@ -7,7 +7,6 @@ namespace Grpc.Web
         public static IServiceCollection AddGrpcWeb(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddTransient<BodyRedirector>();
             services.AddSingleton<BinaryTranscoder>();
             services.AddSingleton<Base64Transcoder>();
             return services;

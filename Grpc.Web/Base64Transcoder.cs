@@ -1,7 +1,6 @@
 using System.IO.Pipelines;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Grpc.Web
@@ -10,7 +9,7 @@ namespace Grpc.Web
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<Base64Transcoder> _logger;
-        
+
         public Base64Transcoder(IHttpContextAccessor httpContextAccessor, ILogger<Base64Transcoder> logger)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -19,43 +18,45 @@ namespace Grpc.Web
 
         public async Task TranscodeStream(RequestDelegate inner)
         {
-            var redirector = _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<BodyRedirector>();
-            using (redirector)
+            var requestReader = _httpContextAccessor.HttpContext.Request.BodyReader;
+            var responseWriter = _httpContextAccessor.HttpContext.Response.BodyWriter;
+            var requestPipe = new Pipe();
+            var responsePipe = new Pipe();
+            var decode = Base64Pipe.Decode(requestReader, requestPipe.Writer);
+            var encode = Base64Pipe.Encode(responsePipe.Reader, responseWriter);
+            
+            using (new BodyRedirector(_httpContextAccessor.HttpContext, requestPipe, responsePipe))
             {
-                var decode = Decode(redirector.RequestReader, redirector.RequestWriter);
                 var next = inner(_httpContextAccessor.HttpContext);
-                var encode = Encode(redirector.ResponseReader, redirector.ResponseWriter);
                 
-                await decode;
-                redirector.RequestWriter.Complete();
+                var length = await decode;
+                requestPipe.Writer.Complete();
+                _logger.LogTrace("Decoded {Length} bytes from base64", length);
+                
                 await next;
-                _httpContextAccessor.HttpContext.Response.BodyWriter.Complete();
-                await encode;
-                redirector.ResponseReader.Complete();
+                await responsePipe.Writer.FlushAsync(); // TODO: May be unnecessary
+                responsePipe.Writer.Complete();
             }
+
+            {
+                var length = await encode;
+                responsePipe.Reader.Complete();
+                _logger.LogTrace("Encoded {Length} bytes to base64", length);
+            }
+            
+            await encode;
         }
 
         public async Task TranscodeTrailers(IHeaderDictionary trailers)
         {
             var pipe = new Pipe();
             var stream = GrpcWebTrailers.Stream(trailers, pipe.Writer);
-            var encode = Encode(pipe.Reader, _httpContextAccessor.HttpContext.Response.BodyWriter);
+            var encode = Base64Pipe.Encode(pipe.Reader, _httpContextAccessor.HttpContext.Response.BodyWriter);
 
             await stream;
             pipe.Writer.Complete();
-            await encode;
+            var length = await encode;
             pipe.Reader.Complete();
-        }
-
-        private async Task Decode(PipeReader input, PipeWriter output)
-        {
-            var length = await Base64Pipe.Decode(input, output);
-            _logger.LogTrace("Decoded {Length} bytes from base64", length);
-        }
-
-        private async Task Encode(PipeReader input, PipeWriter output)
-        {
-            var length = await Base64Pipe.Encode(input, output);
             _logger.LogTrace("Encoded {Length} bytes to base64", length);
         }
     }

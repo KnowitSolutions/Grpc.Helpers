@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -13,21 +14,21 @@ namespace Grpc.Web
 
         private readonly RequestDelegate _next;
         private readonly ILogger<GrpcWebMiddleware> _logger;
-        private readonly Base64Transcoder _base64Transcoder;
         private readonly BinaryTranscoder _binaryTranscoder;
+        private readonly Base64Transcoder _base64Transcoder;
 
         public IHeaderDictionary Trailers { get; set; } = new HeaderDictionary();
 
         public GrpcWebMiddleware(
             RequestDelegate next,
             ILogger<GrpcWebMiddleware> logger,
-            Base64Transcoder base64Transcoder,
-            BinaryTranscoder binaryTranscoder)
+            BinaryTranscoder binaryTranscoder,
+            Base64Transcoder base64Transcoder)
         {
             _next = next;
             _logger = logger;
-            _base64Transcoder = base64Transcoder;
             _binaryTranscoder = binaryTranscoder;
+            _base64Transcoder = base64Transcoder;
         }
 
         public async Task Invoke(HttpContext context)

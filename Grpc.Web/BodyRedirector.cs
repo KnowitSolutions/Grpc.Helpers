@@ -2,48 +2,49 @@ using System;
 using System.IO;
 using System.IO.Pipelines;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Grpc.Web
 {
     internal class BodyRedirector : IDisposable
     {
-        public PipeReader RequestReader { get; private set; }
-        public PipeWriter RequestWriter => _requestPipe.Writer;
-        public PipeReader ResponseReader => _responsePipe.Reader;
-        public PipeWriter ResponseWriter { get; private set; }
-        
-        private readonly IHttpContextAccessor _contextAccessor;
-        
-        private readonly Pipe _requestPipe = new Pipe();
-        private readonly Pipe _responsePipe = new Pipe();
-        private Stream _originalRequestBody;
-        private Stream _originalResponseBody;
+        private readonly HttpContext _context;
+        private readonly Stream _requestBody;
+        private readonly IRequestBodyPipeFeature _requestBodyPipe;
+        private readonly Stream _responseBody;
+        private readonly IResponseBodyPipeFeature _responseBodyPipe;
 
-        public BodyRedirector(IHttpContextAccessor contextAccessor)
+        public BodyRedirector(HttpContext context, Pipe requestPipe, Pipe responsePipe)
         {
-            _contextAccessor = contextAccessor;
-            Start();
-        }
-        
-        public void Dispose() => End();
+            // gRPC middleware don't flush so we have to flush for them
+            // This means we need access to their pipe writer, so we switch the body pipe features as well to get raw access
+            // Although it seems like we could instead switch the body pipe properties on the request and the response
+            // as documented by https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/request-response?view=aspnetcore-3.0#adapters
+            // this ability was removed in https://github.com/aspnet/AspNetCore/pull/10154
+            _context = context;
 
-        private void Start()
-        {
-            RequestReader = _contextAccessor.HttpContext.Request.BodyReader;
-            ResponseWriter = _contextAccessor.HttpContext.Response.BodyWriter;
-            
-            _originalRequestBody = _contextAccessor.HttpContext.Response.Body;
-            _originalResponseBody = _contextAccessor.HttpContext.Response.Body;
-            
-            _contextAccessor.HttpContext.Request.Body = _requestPipe.Reader.AsStream();
-            _contextAccessor.HttpContext.Response.Body = _responsePipe.Writer.AsStream();
+            _requestBody = _context.Request.Body;
+            _context.Request.Body = requestPipe.Reader.AsStream(true);
+            _requestBodyPipe = _context.Features.Get<IRequestBodyPipeFeature>();
+            _context.Features.Set<IRequestBodyPipeFeature>(
+                new RequestBodyPipeFeature {Reader = requestPipe.Reader});
+
+            _responseBody = _context.Response.Body;
+            _context.Response.Body = responsePipe.Writer.AsStream(true);
+            _responseBodyPipe = _context.Features.Get<IResponseBodyPipeFeature>();
+            _context.Features.Set<IResponseBodyPipeFeature>(
+                new ResponseBodyPipeFeature {Writer = responsePipe.Writer});
         }
 
-        private void End()
+        public void Dispose()
         {
-            _contextAccessor.HttpContext.Request.Body = _originalRequestBody;
-            _contextAccessor.HttpContext.Response.Body = _originalResponseBody;
-        }
+            _context.Request.Body.Dispose();
+            _context.Request.Body = _requestBody;
+            _context.Features.Set(_requestBodyPipe);
 
+            _context.Response.Body.Dispose();
+            _context.Response.Body = _responseBody;
+            _context.Features.Set(_responseBodyPipe);
+        }
     }
 }
