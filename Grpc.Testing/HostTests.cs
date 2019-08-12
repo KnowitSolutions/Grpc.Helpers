@@ -26,15 +26,18 @@ namespace Grpc.Testing
         [OneTimeSetUp]
         public async Task SetupHost()
         {
-            _host = Host
+            // TODO: Check if this can be replaced by Microsoft.AspNetCore.TestHost.TestServer
+            var hostBuilder = Host
                 .CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(builder => builder
                     .Configure(Configure)
                     .ConfigureAppConfiguration(ConfigureAppConfiguration)
                     .ConfigureLogging(ConfigureLogging)
                     .ConfigureServices(ConfigureServices)
-                    .ConfigureKestrel(ConfigureKestrel))
-                .Build();
+                    .ConfigureKestrel(ConfigureKestrel));
+            
+            ConfigureHost(hostBuilder);
+            _host = hostBuilder.Build();
             await _host.StartAsync();
 
             var port = _addresses.Addresses.Select(address => new Uri(address).Port).First();
@@ -58,6 +61,10 @@ namespace Grpc.Testing
         public void TeardownScope()
         {
             _scope.Dispose();
+        }
+
+        protected virtual void ConfigureHost(IHostBuilder host)
+        {
         }
 
         protected virtual void Configure(IApplicationBuilder app)

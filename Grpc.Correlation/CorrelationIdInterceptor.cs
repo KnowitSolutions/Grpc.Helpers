@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
+using Serilog.Context;
 
 namespace Grpc.Correlation
 {
@@ -68,7 +69,11 @@ namespace Grpc.Correlation
             }
 
             _correlationId.Value = correlationId;
-            return continuation(request, context);
+
+            using (LogContext.PushProperty("CorrelationId", correlationId))
+            {
+                return continuation(request, context);
+            }
         }
 
         // TODO: All the streaming interceptors

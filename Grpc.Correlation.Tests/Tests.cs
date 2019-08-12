@@ -1,33 +1,71 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.AspNetCore.Server;
 using Grpc.Core;
 using Grpc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using Serilog;
+using Serilog.Context;
+using Serilog.Core;
+using Serilog.Events;
+using ILogger = Serilog.ILogger;
 
 namespace Grpc.Correlation.Tests
 {
-    public class Tests : SideChannelServiceTests<Echo.EchoClient, Service>
+    public class Tests : SideChannelServiceTests<Echo.EchoClient, Service>, ILogEventSink
     {
+        private List<LogEvent> _logEvents;
+
         private Guid CorrelationId => Services.GetService<CorrelationId>().Value;
 
         [Test]
         public void TestBlockingInterception()
         {
-            Assert.AreEqual(Guid.Empty, CorrelationId);
+            AssertEmpty();
             Client.Empty(new Empty());
-            Assert.AreEqual(SideChannel.correlationId, CorrelationId);
+            AssertPopulated();
         }
 
         [Test]
         public async Task TestAsyncInterception()
         {
-            Assert.AreEqual(Guid.Empty, CorrelationId);
+            AssertEmpty();
             await Client.EmptyAsync(new Empty());
-            Assert.AreEqual(SideChannel.correlationId, CorrelationId);
+            AssertPopulated();
         }
+
+        private void AssertEmpty()
+        {
+            Assert.AreEqual(Guid.Empty, CorrelationId);
+        }
+
+        private void AssertPopulated()
+        {
+            Assert.AreEqual(SideChannel.correlationId, CorrelationId);
+
+            var logEvent = _logEvents.FirstOrDefault(@event => @event.MessageTemplate.Text == "Message");
+            Assert.NotNull(logEvent);
+            
+            Assert.Contains("CorrelationId", logEvent.Properties.Keys.ToList());
+            Assert.IsInstanceOf<ScalarValue>(logEvent.Properties["CorrelationId"]);
+            
+            var property = logEvent.Properties["CorrelationId"] as ScalarValue;
+            Assert.AreEqual(SideChannel.correlationId, property?.Value);
+        }
+
+        [SetUp]
+        public void Setup() =>_logEvents = new List<LogEvent>();
+
+        protected override void ConfigureHost(IHostBuilder host) => host
+            .UseSerilog((context, configuration) => configuration
+                .Enrich.FromLogContext()
+                .WriteTo.Sink(this));
 
         protected override void ConfigureServices(IServiceCollection services)
         {
@@ -35,26 +73,29 @@ namespace Grpc.Correlation.Tests
             services.AddCorrelationId();
         }
 
-        protected override void ConfigureGrpc(GrpcServiceOptions options)
-        {
-            options.AddCorrelationId();
-        }
+        protected override void ConfigureGrpc(GrpcServiceOptions options) => options
+            .AddCorrelationId();
+
+        public void Emit(LogEvent logEvent) => _logEvents.Add(logEvent);
     }
-    
+
     public class Service : Echo.EchoBase
     {
         private readonly CorrelationId _correlationId;
+        private readonly ILogger<Service> _logger;
         private readonly dynamic _sideChannel;
-        
-        public Service(CorrelationId correlationId, dynamic sideChannel)
+
+        public Service(CorrelationId correlationId, ILogger<Service> logger, dynamic sideChannel)
         {
             _correlationId = correlationId;
+            _logger = logger;
             _sideChannel = sideChannel;
         }
 
         public override Task<Empty> Empty(Empty request, ServerCallContext context)
         {
             _sideChannel.correlationId = _correlationId.Value;
+            _logger.LogInformation("Message");
             return Task.FromResult(request);
         }
     }
