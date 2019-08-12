@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using Grpc.AspNetCore.Server;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
+using Grpc.Net.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
@@ -32,10 +36,29 @@ namespace Grpc.Testing
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            // TODO: Grant access to builder in configure method
             services.AddGrpc(ConfigureGrpc);
+
+            /*
+            According to https://devblogs.microsoft.com/aspnet/asp-net-core-and-blazor-updates-in-net-core-3-0-preview-6/
+            the following should work. Yet it doesn't. The managed implementation of gRPC client is preferable as it
+            brings amongst other things deadline forwarding to the table, but for now it looks like it is broken.
+            TODO: Start using the below implementation instead of the native gRPC client
+            services.AddGrpcClient<TClient>((provider, options) =>
+            {
+                options.BaseAddress = new UriBuilder
+                {
+                    Scheme = "http",
+                    Host = EndPoint.Address.ToString(),
+                    Port = EndPoint.Port
+                }.Uri;
+                
+                foreach (var interceptor in provider.GetService<IEnumerable<Interceptor>>())
+                {
+                    options.Interceptors.Add(interceptor);
+                }
+            });
+            */
             
-            // TODO: Move to extension method, possibly in service discovery
             services.AddScoped(provider =>
             {
                 var channel = new Channel(EndPoint.ToString(), ChannelCredentials.Insecure);
@@ -47,6 +70,12 @@ namespace Grpc.Testing
 
                 return (TClient) Activator.CreateInstance(typeof(TClient), callInvoker);
             });
+        }
+
+        protected override void ConfigureKestrel(KestrelServerOptions options)
+        {
+            options.Listen(IPAddress.Loopback, 0,
+                listenOptions => listenOptions.Protocols = HttpProtocols.Http2);
         }
 
         protected virtual void ConfigureGrpc(GrpcServiceOptions options)

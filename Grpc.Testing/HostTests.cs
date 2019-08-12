@@ -81,8 +81,6 @@ namespace Grpc.Testing
 
         protected virtual void ConfigureKestrel(KestrelServerOptions options)
         {
-            options.Listen(IPAddress.Loopback, 0,
-                listenOptions => listenOptions.Protocols = HttpProtocols.Http2);
         }
     }
 }
