@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Web", "Grpc.Web\Grpc.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Web.Test", "Grpc.Web.Test\Grpc.Web.Test.csproj", "{11C2794F-F635-4AC8-A12F-27D2236EB9F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kestrel.ProtocolMultiplexing", "Kestrel.ProtocolMultiplexing\Kestrel.ProtocolMultiplexing.csproj", "{5732DAD5-31FA-4A5D-A63E-1A6D02806188}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{11C2794F-F635-4AC8-A12F-27D2236EB9F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11C2794F-F635-4AC8-A12F-27D2236EB9F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11C2794F-F635-4AC8-A12F-27D2236EB9F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5732DAD5-31FA-4A5D-A63E-1A6D02806188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5732DAD5-31FA-4A5D-A63E-1A6D02806188}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5732DAD5-31FA-4A5D-A63E-1A6D02806188}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5732DAD5-31FA-4A5D-A63E-1A6D02806188}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
