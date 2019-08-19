@@ -33,7 +33,7 @@ namespace Grpc.Web
 
         public async Task Invoke(HttpContext context)
         {
-            var match = ContentType.Match(context.Request.ContentType);
+            var match = ContentType.Match(context.Request.ContentType ?? "");
             if (match.Success)
             {
                 _logger.LogInformation("Intercepted gRPC Web request to {Uri}", context.Request.Path.Value);
