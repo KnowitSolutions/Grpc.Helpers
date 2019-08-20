@@ -37,19 +37,12 @@ namespace Grpc.Web
             if (match.Success)
             {
                 _logger.LogInformation("Intercepted gRPC Web request to {Uri}", context.Request.Path.Value);
-
-                var format = match.Groups["format"].Success ? match.Groups["format"].Value : null;
+                
                 var isText = match.Groups["text"].Success;
-
-                if (isText)
-                {
-                    await Intercept(context, format, _base64Transcoder);
-                }
-                else
-                {
-                    
-                    await Intercept(context, format, _binaryTranscoder);
-                }
+                var format = match.Groups["format"].Success ? match.Groups["format"].Value : null;
+                var transcoder = isText ? (ITranscoder) _base64Transcoder : _binaryTranscoder;
+                
+                await Intercept(context, isText, format, transcoder);
             }
             else
             {
@@ -57,10 +50,18 @@ namespace Grpc.Web
             }
         }
 
-        private async Task Intercept(HttpContext context, string format, ITranscoder transcoder)
+        private async Task Intercept(HttpContext context, bool isText, string format, ITranscoder transcoder)
         {
+            var textPostfix = isText ? "-text" : "";
+            var formatPostfix = format != null ? $"+{format}" : "";
+            
             context.Features.Set<IHttpResponseTrailersFeature>(this);
-            context.Request.ContentType = "application/grpc" + (format != null ? $"+{format}" : "");
+            context.Request.ContentType = $"application/grpc{formatPostfix}";
+            context.Response.OnStarting(() =>
+            {
+                context.Response.ContentType = $"application/grpc-web{textPostfix}{formatPostfix}";
+                return Task.CompletedTask;
+            });
 
             await transcoder.TranscodeStream(_next);
             if (Trailers.Count > 0)
