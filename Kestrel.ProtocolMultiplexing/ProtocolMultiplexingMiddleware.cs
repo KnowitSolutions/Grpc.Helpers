@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.CSharp.RuntimeBinder;
 
-namespace Kestrel.ProtocolMultiplexing
+namespace Knowit.Kestrel.ProtocolMultiplexing
 {
     internal class ProtocolMultiplexingMiddleware
     {

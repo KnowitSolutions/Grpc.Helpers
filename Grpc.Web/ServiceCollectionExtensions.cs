@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     public static class ServiceCollectionExtensions
     {

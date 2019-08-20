@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     internal class BinaryTranscoder : ITranscoder
     {

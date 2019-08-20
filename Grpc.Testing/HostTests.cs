@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
-namespace Grpc.Testing
+namespace Knowit.Grpc.Testing
 {
     public class HostTests
     {

@@ -4,7 +4,7 @@ using System.IO.Pipelines;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     internal class BodyRedirector : IDisposable
     {

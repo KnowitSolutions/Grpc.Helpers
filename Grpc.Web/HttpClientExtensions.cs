@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using Grpc.Core;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     public static class HttpClientExtensions
     {

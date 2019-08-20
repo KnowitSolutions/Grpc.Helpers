@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace Grpc.Web.Test
+namespace Knowit.Grpc.Web.Tests
 {
     public class Base64DecoderTests
     {

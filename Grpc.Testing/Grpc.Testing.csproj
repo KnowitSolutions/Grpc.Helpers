@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <OutputType>Library</OutputType>
+        <AssemblyName>Knowit.Grpc.Testing</AssemblyName>
+        <RootNamespace>Knowit.Grpc.Testing</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

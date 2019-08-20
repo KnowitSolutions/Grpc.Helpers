@@ -1,6 +1,6 @@
 using System;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     public class Base64Encoder : Base64
     {

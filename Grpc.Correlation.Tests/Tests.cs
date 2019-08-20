@@ -5,18 +5,16 @@ using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.AspNetCore.Server;
 using Grpc.Core;
-using Grpc.Testing;
+using Knowit.Grpc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Serilog;
-using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;
-using ILogger = Serilog.ILogger;
 
-namespace Grpc.Correlation.Tests
+namespace Knowit.Grpc.Correlation.Tests
 {
     public class Tests : SideChannelServiceTests<Echo.EchoClient, Service>, ILogEventSink
     {

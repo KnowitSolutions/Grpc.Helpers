@@ -1,7 +1,7 @@
 using System.IO.Pipelines;
 using System.Threading.Tasks;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     internal class Base64Pipe
     {

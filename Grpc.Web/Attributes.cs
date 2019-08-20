@@ -1,3 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("Grpc.Web.Test")]
+[assembly:InternalsVisibleTo("Knowit.Grpc.Web.Test")]

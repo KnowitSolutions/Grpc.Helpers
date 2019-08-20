@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <OutputType>Library</OutputType>
+        <AssemblyName>Knowit.Grpc.Correlation</AssemblyName>
+        <RootNamespace>Knowit.Grpc.Correlation</RootNamespace>
     </PropertyGroup>
     
     <ItemGroup>

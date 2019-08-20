@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     internal class Base64Handler : DelegatingHandler
     {

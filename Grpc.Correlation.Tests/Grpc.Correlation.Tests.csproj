@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
+        <AssemblyName>Knowit.Grpc.Correlation.Tests</AssemblyName>
+        <RootNamespace>Knowit.Grpc.Correlation.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

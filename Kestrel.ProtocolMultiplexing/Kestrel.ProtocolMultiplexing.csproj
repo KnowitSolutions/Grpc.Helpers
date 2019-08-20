@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <OutputType>Library</OutputType>
+        <AssemblyName>Knowit.Kestrel.ProtocolMultiplexing</AssemblyName>
+        <RootNamespace>Knowit.Kestrel.ProtocolMultiplexing</RootNamespace>
     </PropertyGroup>
 
 </Project>

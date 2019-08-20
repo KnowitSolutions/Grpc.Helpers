@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Grpc.Net.ClientFactory;
-using Grpc.Testing;
+using Knowit.Grpc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
-namespace Grpc.Client.Tests
+namespace Knowit.Grpc.Client.Tests
 {
     public class Tests : HostTests
     {

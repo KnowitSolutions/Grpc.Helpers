@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     public abstract class Base64
     {

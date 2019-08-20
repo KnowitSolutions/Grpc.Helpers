@@ -2,17 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using Grpc.AspNetCore.Server;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
-using Grpc.Net.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace Grpc.Testing
+namespace Knowit.Grpc.Testing
 {
     public class ServiceTests<TClient, TService> : HostTests
         where TClient : ClientBase<TClient>

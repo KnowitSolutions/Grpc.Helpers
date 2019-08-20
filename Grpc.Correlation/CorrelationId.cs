@@ -1,6 +1,6 @@
 using System;
 
-namespace Grpc.Correlation
+namespace Knowit.Grpc.Correlation
 {
     public class CorrelationId
     {

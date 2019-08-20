@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>Library</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>Knowit.Grpc.Web</AssemblyName>
+    <RootNamespace>Knowit.Grpc.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

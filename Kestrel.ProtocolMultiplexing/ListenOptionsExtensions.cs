@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
-namespace Kestrel.ProtocolMultiplexing
+namespace Knowit.Kestrel.ProtocolMultiplexing
 {
     public static class ListenOptionsExtensions
     {

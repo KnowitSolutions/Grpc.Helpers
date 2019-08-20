@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Grpc.Testing;
+using Knowit.Grpc.Testing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace Grpc.Web.Test
+namespace Knowit.Grpc.Web.Tests
 {
     public class ServiceTests : ServiceTests<Echo.EchoClient, Service>
     {

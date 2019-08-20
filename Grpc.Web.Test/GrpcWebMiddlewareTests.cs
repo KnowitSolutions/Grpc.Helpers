@@ -5,14 +5,14 @@ using System.IO.Pipelines;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grpc.Testing;
+using Knowit.Grpc.Testing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
-namespace Grpc.Web.Test
+namespace Knowit.Grpc.Web.Tests
 {
     public class GrpcWebMiddlewareTests : HostTests
     {

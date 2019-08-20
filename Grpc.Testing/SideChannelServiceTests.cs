@@ -3,7 +3,7 @@ using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace Grpc.Testing
+namespace Knowit.Grpc.Testing
 {
     public class SideChannelServiceTests<TClient, TService> : ServiceTests<TClient, TService>
         where TClient : ClientBase<TClient>

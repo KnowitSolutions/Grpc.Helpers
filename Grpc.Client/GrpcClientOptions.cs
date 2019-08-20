@@ -1,4 +1,4 @@
-namespace Grpc.Client
+namespace Knowit.Grpc.Client
 {
     public class GrpcClientOptions
     {

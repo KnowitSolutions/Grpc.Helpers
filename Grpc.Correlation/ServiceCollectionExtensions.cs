@@ -2,7 +2,7 @@ using System;
 using Grpc.Core.Interceptors;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Grpc.Correlation
+namespace Knowit.Grpc.Correlation
 {
     public static class ServiceCollectionExtensions
     {

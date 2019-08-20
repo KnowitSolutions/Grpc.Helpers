@@ -4,7 +4,7 @@ using System.IO.Pipelines;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Grpc.Web.Test
+namespace Knowit.Grpc.Web.Tests
 {
     public class Base64PipeTests
     {

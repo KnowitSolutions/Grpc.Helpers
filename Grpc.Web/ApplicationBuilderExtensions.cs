@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 
-namespace Grpc.Web
+namespace Knowit.Grpc.Web
 {
     public static class ApplicationBuilderExtensions
     {

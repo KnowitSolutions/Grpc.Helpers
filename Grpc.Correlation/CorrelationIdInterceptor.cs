@@ -5,7 +5,7 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Serilog.Context;
 
-namespace Grpc.Correlation
+namespace Knowit.Grpc.Correlation
 {
     internal class CorrelationIdInterceptor : Interceptor
     {

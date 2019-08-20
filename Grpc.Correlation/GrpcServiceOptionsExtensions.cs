@@ -1,7 +1,7 @@
 using System;
 using Grpc.AspNetCore.Server;
 
-namespace Grpc.Correlation
+namespace Knowit.Grpc.Correlation
 {
     public static class GrpcServiceOptionsExtensions
     {

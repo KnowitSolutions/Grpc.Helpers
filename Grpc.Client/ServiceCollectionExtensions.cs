@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Grpc.Client
+namespace Knowit.Grpc.Client
 {
     public static class ServiceCollectionExtensions
     {
