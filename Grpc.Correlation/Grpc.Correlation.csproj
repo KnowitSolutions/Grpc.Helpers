@@ -3,8 +3,12 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <OutputType>Library</OutputType>
+        <IsPackable>true</IsPackable>
         <AssemblyName>Knowit.Grpc.Correlation</AssemblyName>
         <RootNamespace>Knowit.Grpc.Correlation</RootNamespace>
+        <PackageVersion />
+        <Authors>Andreas Hagen</Authors>
+        <Copyright>Knowit</Copyright>
     </PropertyGroup>
     
     <ItemGroup>

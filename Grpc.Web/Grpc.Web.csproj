@@ -3,9 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>Knowit.Grpc.Web</AssemblyName>
     <RootNamespace>Knowit.Grpc.Web</RootNamespace>
+    <PackageVersion />
+    <Authors>Andreas Hagen</Authors>
+    <Copyright>Knowit</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
