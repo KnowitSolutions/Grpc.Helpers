@@ -88,6 +88,7 @@ namespace Knowit.Grpc.Testing
 
         protected virtual void ConfigureKestrel(KestrelServerOptions options)
         {
+            options.Listen(IPAddress.Loopback, 0);
         }
     }
 }
