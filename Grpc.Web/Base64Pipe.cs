@@ -32,13 +32,13 @@ namespace Knowit.Grpc.Web
                     base64.ProcessBlock(inputMemory, outputMemory, ref written, ref state);
                 }
 
-                input.AdvanceTo(result.Buffer.End);
-                output.Advance((int) written);
-                await output.FlushAsync();
-
                 var idx = (int) written;
                 @byte = outputMemory.Span[idx];
                 length += written;
+
+                input.AdvanceTo(result.Buffer.End);
+                output.Advance((int) written);
+                await output.FlushAsync();
             } while (!result.IsCompleted);
 
             {
