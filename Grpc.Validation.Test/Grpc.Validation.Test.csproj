@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <IsPackable>false</IsPackable>
+        <AssemblyName>Knowit.Grpc.Validation.Tests</AssemblyName>
+        <RootNamespace>Knowit.Grpc.Validation.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

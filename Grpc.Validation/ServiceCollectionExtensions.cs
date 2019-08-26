@@ -3,7 +3,7 @@ using System.Linq;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Grpc.Validation
+namespace Knowit.Grpc.Validation
 {
     public static class ServiceCollectionExtensions
     {

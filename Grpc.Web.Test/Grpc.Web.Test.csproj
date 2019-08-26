@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Knowit.Grpc.Web.Test</AssemblyName>
+    <AssemblyName>Knowit.Grpc.Web.Tests</AssemblyName>
     <RootNamespace>Knowit.Grpc.Web.Tests</RootNamespace>
   </PropertyGroup>
 

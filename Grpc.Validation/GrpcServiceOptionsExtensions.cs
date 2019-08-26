@@ -1,6 +1,6 @@
 using Grpc.AspNetCore.Server;
 
-namespace Grpc.Validation
+namespace Knowit.Grpc.Validation
 {
     public static class GrpcServiceOptionsExtensions
     {

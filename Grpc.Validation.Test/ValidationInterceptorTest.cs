@@ -7,6 +7,7 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.AspNetCore.Server;
 using Grpc.Core;
 using Knowit.Grpc.Testing;
+using Knowit.Grpc.Validation;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 

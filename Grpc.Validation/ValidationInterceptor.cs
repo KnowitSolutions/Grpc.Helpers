@@ -7,7 +7,7 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.Extensions.Logging;
 
-namespace Grpc.Validation
+namespace Knowit.Grpc.Validation
 {
     internal class ValidationInterceptor : Interceptor
     {
