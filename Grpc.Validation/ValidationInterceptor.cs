@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -12,7 +11,6 @@ namespace Knowit.Grpc.Validation
 {
     internal class ValidationInterceptor : Interceptor
     {
-        private readonly Dictionary<Type, IValidator> _validators = new Dictionary<Type, IValidator>();
         private readonly IServiceProvider _services;
         private readonly ILogger<ValidationInterceptor> _logger;
 

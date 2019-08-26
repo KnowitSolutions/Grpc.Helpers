@@ -5,15 +5,12 @@ This library implements a gRPC interceptor that will automatically validate requ
 ## Getting started
 
 1. Add this library to your gRPC Service
-2. Install the [FluentValidation](https://www.nuget.org/packages/FluentValidation) NuGet package
-3. Install the [FluentValidation.AspNetCore](https://www.nuget.org/packages/FluentValidation.AspNetCore) NuGet package
-4. Add FluentValidation in `ConfigureServices`
+2. Add the validation interceptor in `ConfigureServices`
 
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
     ...
-    services.AddMvc().AddFluentValidation();
     services.AddGrpc(options => options.AddValidationInterceptor());
     ...
 }
@@ -28,14 +25,6 @@ In order for the validation interceptor to gain access to your validators, they 
 ```cs 
 services.AddValidator<MyValidator>();
 ```
-
-This is equivalent to
-
-```
-services.AddTransient<IValidator<MyClass>, MyValidator>();
-```
-
-where `MyValidator` is a validator for `MyClass`.
 
 You can also add validators using the FluentValidation ASP.NET integration. See [the documentation](https://fluentvalidation.net/aspnet#getting-started).
 
