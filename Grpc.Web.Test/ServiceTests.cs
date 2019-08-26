@@ -32,7 +32,7 @@ namespace Knowit.Grpc.Web.Tests
         {
             var bytes = new byte[1024 * 1024];
             var random = new Random();
-            //random.NextBytes(bytes); // TODO: Uncomment
+            random.NextBytes(bytes);
 
             var client = new HttpClient(new Base64Handler());
             var request = new BytesValue {Value = ByteString.CopyFrom(bytes)};

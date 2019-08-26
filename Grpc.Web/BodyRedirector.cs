@@ -11,8 +11,7 @@ namespace Knowit.Grpc.Web
         private readonly HttpContext _context;
         private readonly Stream _requestBody;
         private readonly IRequestBodyPipeFeature _requestBodyPipe;
-        private readonly Stream _responseBody;
-        private readonly IResponseBodyPipeFeature _responseBodyPipe;
+        private readonly IHttpResponseBodyFeature _responseBody;
 
         public BodyRedirector(HttpContext context, Pipe requestPipe, Pipe responsePipe)
         {
@@ -29,11 +28,9 @@ namespace Knowit.Grpc.Web
             _context.Features.Set<IRequestBodyPipeFeature>(
                 new RequestBodyPipeFeature {Reader = requestPipe.Reader});
 
-            _responseBody = _context.Response.Body;
-            _context.Response.Body = responsePipe.Writer.AsStream(true);
-            _responseBodyPipe = _context.Features.Get<IResponseBodyPipeFeature>();
-            _context.Features.Set<IResponseBodyPipeFeature>(
-                new ResponseBodyPipeFeature {Writer = responsePipe.Writer});
+            _responseBody = _context.Features.Get<IHttpResponseBodyFeature>();
+            _context.Features.Set<IHttpResponseBodyFeature>(
+                new ResponseBodyFeature {Writer = responsePipe.Writer});
         }
 
         public void Dispose()
@@ -41,10 +38,7 @@ namespace Knowit.Grpc.Web
             _context.Request.Body.Dispose();
             _context.Request.Body = _requestBody;
             _context.Features.Set(_requestBodyPipe);
-
-            _context.Response.Body.Dispose();
-            _context.Response.Body = _responseBody;
-            _context.Features.Set(_responseBodyPipe);
+            _context.Features.Set(_responseBody);
         }
     }
 }

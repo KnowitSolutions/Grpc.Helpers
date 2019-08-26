@@ -62,6 +62,7 @@ namespace Knowit.Grpc.Web
                 return Task.CompletedTask;
             });
 
+            // await context.Response.StartAsync(); // TODO: Start async stream before outputting
             await transcoder.TranscodeStream(_next);
             if (Trailers.Count > 0)
             {
