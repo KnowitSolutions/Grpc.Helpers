@@ -10,17 +10,6 @@ namespace Knowit.Grpc.Validation
         /// <summary>
         /// Add a FluentValidation validator to a service collection. The validator must implement the
         /// <see cref="IValidator{T}"/> interface.
-        ///
-        ///     <code>
-        ///         services.AddValidator&lt;ValidatorImplementation&gt;();
-        ///     </code>
-        ///
-        ///     is equivalent to 
-        ///
-        ///     <code>
-        ///         services.AddTransient&lt;IValidator&lt;TypeToValidate&gt;, ValidatorImplementation&gt;();
-        ///     </code>
-        /// 
         /// </summary>
         /// <param name="services">the service collection</param>
         /// <typeparam name="TValidator">type of the validator</typeparam>
@@ -35,8 +24,7 @@ namespace Knowit.Grpc.Validation
                                 ?? throw new InvalidOperationException(
                                     "A validator must implement the generic interface 'FluentValidation.IValidator<>'.");
 
-            services.AddTransient(interfaceType, implementationType);
-
+            services.AddSingleton(interfaceType, implementationType);
             return services;
         }
     }

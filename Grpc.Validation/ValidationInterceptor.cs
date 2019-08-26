@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Knowit.Grpc.Validation
@@ -12,12 +13,12 @@ namespace Knowit.Grpc.Validation
     internal class ValidationInterceptor : Interceptor
     {
         private readonly Dictionary<Type, IValidator> _validators = new Dictionary<Type, IValidator>();
-        private readonly IValidatorFactory _validatorFactory;
+        private readonly IServiceProvider _services;
         private readonly ILogger<ValidationInterceptor> _logger;
 
-        public ValidationInterceptor(IValidatorFactory validatorFactory, ILogger<ValidationInterceptor> logger)
+        public ValidationInterceptor(IServiceProvider services, ILogger<ValidationInterceptor> logger)
         {
-            _validatorFactory = validatorFactory;
+            _services = services;
             _logger = logger;
         }
 
@@ -35,47 +36,18 @@ namespace Knowit.Grpc.Validation
             ServerCallContext context,
             UnaryServerMethod<TRequest, TResponse> continuation)
         {
-            var validator = GetValidator<TRequest>();
-
-            if (validator != null)
-            {
-                var result = validator.Validate(request);
-                if (!result.IsValid)
-                {
-                    var message = string.Join(" ", result.Errors.Select(err => err.ToString()));
-                    throw new RpcException(new Status(StatusCode.InvalidArgument, message), message);
-                }
-            }
-            else
-            {
-                _logger.LogWarning("No validators for the type '{MessageType}' found.", typeof(TRequest).Name);
-            }
-
-            return continuation(request, context);
-        }
-
-
-        /// <summary>
-        ///     Looks for a validator for a type in a dictionary. Creates a new validator if not found.
-        ///     Returns <c>null</c> if no validator implementation exists for the type.
-        ///     The validator instance is cached in a dictionary and reused next call.
-        /// </summary>
-        /// <typeparam name="TRequest">type of the request</typeparam>
-        /// <returns>a validator or null if none exist</returns>
-        private IValidator<TRequest>? GetValidator<TRequest>()
-        {
-            var requestType = typeof(TRequest);
-            var validator = _validators.GetValueOrDefault(requestType);
+            var validator = _services.GetService<IValidator<TRequest>>();
             if (validator == null)
             {
-                validator = _validatorFactory.GetValidator<TRequest>();
-                if (validator != null)
-                {
-                    _validators[requestType] = validator;
-                }
+                _logger.LogWarning("No validators for the type '{MessageType}' found.", typeof(TRequest).Name);
+                return continuation(request, context);
             }
 
-            return (IValidator<TRequest>?) validator;
+            var result = validator.Validate(request);
+            if (result.IsValid) return continuation(request, context);
+            
+            var message = string.Join(" ", result.Errors.Select(err => err.ToString()));
+            throw new RpcException(new Status(StatusCode.InvalidArgument, message));
         }
     }
 }

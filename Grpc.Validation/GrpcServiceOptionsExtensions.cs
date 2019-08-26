@@ -14,7 +14,6 @@ namespace Knowit.Grpc.Validation
         public static GrpcServiceOptions AddValidationInterceptor(this GrpcServiceOptions serviceOptions)
         {
             serviceOptions.Interceptors.Add<ValidationInterceptor>();
-            
             return serviceOptions;
         }
     }
