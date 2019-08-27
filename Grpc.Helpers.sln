@@ -22,6 +22,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Validation.Test", "Grp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kestrel.ProtocolMultiplexing", "Kestrel.ProtocolMultiplexing\Kestrel.ProtocolMultiplexing.csproj", "{5732DAD5-31FA-4A5D-A63E-1A6D02806188}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{73DFFB50-103F-487F-994F-C602818BEB1B}"
+ProjectSection(SolutionItems) = preProject
+	.gitignore = .gitignore
+	.gitlab-ci.yml = .gitlab-ci.yml
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

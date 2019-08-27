@@ -1,0 +1,54 @@
+.build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/core/sdk:3.0
+  script: dotnet pack $CI_JOB_NAME --output . -p:PackageVersion=$VERSION.$CI_PIPELINE_IID
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - $CI_JOB_NAME/**/*
+  artifacts:
+    paths:
+      - '*.nupkg'
+
+Grpc.Client:
+  extends: .build
+  variables:
+    VERSION: '0.9'
+
+Grpc.Correlation:
+  extends: .build
+  variables:
+    VERSION: '0.9'
+
+Grpc.Testing:
+  extends: .build
+  variables:
+    VERSION: '0.9' 
+
+Grpc.Validation:
+  extends: .build
+  variables:
+    VERSION: '0.9'
+
+Grpc.Web:
+  extends: .build
+  variables:
+    VERSION: '0.9'
+
+Kestrel.ProtocolMultiplexing:
+  extends: .build
+  variables:
+    VERSION: '0.9'
+
+deploy:
+  stage: deploy
+  image: mcr.microsoft.com/dotnet/core/sdk:3.0
+  script:
+    for package in *.nupkg;
+    do
+      dotnet nuget push "$package" --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY;
+    done
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - '*/**/*'
