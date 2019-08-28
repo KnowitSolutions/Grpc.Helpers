@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Web.Test", "Grpc.Web.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Validation", "Grpc.Validation\Grpc.Validation.csproj", "{5F09D148-87BD-4DFF-B969-0A1DA15C1ED1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Validation.Test", "Grpc.Validation.Test\Grpc.Validation.Test.csproj", "{112CF1B7-F309-4F14-86E4-262688F0599E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Validation.Tests", "Grpc.Validation.Tests\Grpc.Validation.Tests.csproj", "{112CF1B7-F309-4F14-86E4-262688F0599E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kestrel.ProtocolMultiplexing", "Kestrel.ProtocolMultiplexing\Kestrel.ProtocolMultiplexing.csproj", "{5732DAD5-31FA-4A5D-A63E-1A6D02806188}"
 EndProject
@@ -27,6 +27,8 @@ ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 	.gitlab-ci.yml = .gitlab-ci.yml
 EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kestrel.ProtocolMultiplexingTests", "Kestrel.ProtocolMultiplexingTests\Kestrel.ProtocolMultiplexingTests.csproj", "{FCAD7915-F916-4640-9653-8ADE7ED97591}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,5 +80,9 @@ Global
 		{5732DAD5-31FA-4A5D-A63E-1A6D02806188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5732DAD5-31FA-4A5D-A63E-1A6D02806188}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5732DAD5-31FA-4A5D-A63E-1A6D02806188}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCAD7915-F916-4640-9653-8ADE7ED97591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCAD7915-F916-4640-9653-8ADE7ED97591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCAD7915-F916-4640-9653-8ADE7ED97591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCAD7915-F916-4640-9653-8ADE7ED97591}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
