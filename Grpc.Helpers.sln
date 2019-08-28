@@ -28,7 +28,7 @@ ProjectSection(SolutionItems) = preProject
 	.gitlab-ci.yml = .gitlab-ci.yml
 EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kestrel.ProtocolMultiplexingTests", "Kestrel.ProtocolMultiplexingTests\Kestrel.ProtocolMultiplexingTests.csproj", "{FCAD7915-F916-4640-9653-8ADE7ED97591}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kestrel.ProtocolMultiplexing.Tests", "Kestrel.ProtocolMultiplexing.Tests\Kestrel.ProtocolMultiplexing.Tests.csproj", "{FCAD7915-F916-4640-9653-8ADE7ED97591}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
