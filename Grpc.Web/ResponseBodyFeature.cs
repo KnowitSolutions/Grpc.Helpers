@@ -9,14 +9,21 @@ namespace Knowit.Grpc.Web
 {
     internal class ResponseBodyFeature : IHttpResponseBodyFeature
     {
+        private readonly IHttpResponseBodyFeature _priorFeature;
+        
+        public ResponseBodyFeature(IHttpResponseBodyFeature priorFeature)
+        {
+            _priorFeature = priorFeature;
+        }
+        
         public Stream Stream => null;
         public PipeWriter Writer { get; internal set; }
 
-        public Task StartAsync(CancellationToken cancellationToken = new CancellationToken()) =>
-            Task.CompletedTask;
+        public async Task StartAsync(CancellationToken cancellationToken = new CancellationToken()) =>
+            await _priorFeature.StartAsync(cancellationToken);
 
-        public Task CompleteAsync() =>
-            Task.CompletedTask;
+        public async Task CompleteAsync() => 
+            await _priorFeature.CompleteAsync();
 
         public Task SendFileAsync(string path, long offset, long? count,
             CancellationToken cancellationToken = new CancellationToken()) =>

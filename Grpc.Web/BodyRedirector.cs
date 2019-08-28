@@ -29,8 +29,8 @@ namespace Knowit.Grpc.Web
                 new RequestBodyPipeFeature {Reader = requestPipe.Reader});
 
             _responseBody = _context.Features.Get<IHttpResponseBodyFeature>();
-            _context.Features.Set<IHttpResponseBodyFeature>(
-                new ResponseBodyFeature {Writer = responsePipe.Writer});
+            var responseBody = new ResponseBodyFeature(_responseBody) {Writer = responsePipe.Writer};
+            _context.Features.Set<IHttpResponseBodyFeature>(responseBody);
         }
 
         public void Dispose()
