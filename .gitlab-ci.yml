@@ -2,10 +2,6 @@
   stage: build
   image: mcr.microsoft.com/dotnet/core/sdk:3.0
   script: dotnet pack $CI_JOB_NAME --output . -p:PackageVersion=$VERSION.$CI_PIPELINE_IID
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - $CI_JOB_NAME/**/*
   artifacts:
     paths:
       - '*.nupkg'
@@ -14,31 +10,55 @@ Grpc.Client:
   extends: .build
   variables:
     VERSION: '0.9'
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Grpc.Client/**/*
 
 Grpc.Correlation:
   extends: .build
   variables:
     VERSION: '0.9'
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Grpc.Correlation/**/*
 
 Grpc.Testing:
   extends: .build
   variables:
-    VERSION: '0.9' 
+    VERSION: '0.9'
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Grpc.Testing/**/*
 
 Grpc.Validation:
   extends: .build
   variables:
     VERSION: '0.9'
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Grpc.Validation/**/*
 
 Grpc.Web:
   extends: .build
   variables:
     VERSION: '0.9'
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Grpc.Web/**/*
 
 Kestrel.ProtocolMultiplexing:
   extends: .build
   variables:
     VERSION: '0.9'
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Kestrel.ProtocolMultiplexing/**/*
 
 deploy:
   stage: deploy
