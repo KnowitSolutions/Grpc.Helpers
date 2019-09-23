@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
-using Grpc.Net.ClientFactory;
+using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using Knowit.Grpc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,40 +11,42 @@ using NUnit.Framework;
 
 namespace Knowit.Grpc.Client.Tests
 {
-    public class Tests : HostTests
+    public class Tests : ServiceTests<Echo.EchoClient, Service>
     {
         [Test]
-        public void TestClientExists()
+        public async Task TestClient()
         {
-            Services.GetRequiredService<Echo.EchoClient>();
+            await Client.EmptyAsync(new Empty());
         }
 
-        [TestCase("EchoClient", ExpectedResult = "echo.address")]
-        [TestCase("EchoClient, Named", ExpectedResult = "named.address")]
-        [TestCase("EchoClient, Structured", ExpectedResult = "structured.address")]
-        public string TestClientAddress(string name)
+        [Test]
+        public void TestAddress()
         {
-            var monitor = Services.GetService<IOptionsMonitor<GrpcClientFactoryOptions>>();
-            var options = monitor.Get(name);
-            return options.BaseAddress.Host;
+            var monitor = Services.GetRequiredService<IOptionsMonitor<GrpcClientOptions>>();
+            var options = monitor.Get("Echo");
+            Assert.AreEqual("echo.address",options.Address);
         }
 
         protected override void ConfigureAppConfiguration(IConfigurationBuilder configuration)
         {
             configuration.AddInMemoryCollection(new Dictionary<string, string>
             {
-                {"Grpc:Clients:Echo", "echo.address"},
-                {"Grpc:Clients:Named", "named.address"},
-                {"Grpc:Clients:Structured:Address", "structured.address"}
+                {"Grpc:Clients:Echo", "echo.address"}
             });
         }
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            base.ConfigureServices(services);
-            services.AddGrpcClientConfiguration<Echo.EchoClient>();
-            services.AddGrpcClientConfiguration<Echo.EchoClient>("Named");
-            services.AddGrpcClientConfiguration<Echo.EchoClient>("Structured");
+            services.AddGrpc(ConfigureGrpc);
+            services.AddGrpcClientConfiguration<Echo.EchoClient>(options =>
+            {
+                options.BaseAddress = new Uri($"http://{EndPoint}");
+            });
         }
+    }
+
+    public class Service : Echo.EchoBase {
+        public override Task<Empty> Empty(Empty request, ServerCallContext context) => 
+            Task.FromResult(request);
     }
 }

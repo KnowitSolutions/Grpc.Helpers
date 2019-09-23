@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Grpc.Core;
 using Grpc.Net.ClientFactory;
@@ -14,13 +15,13 @@ namespace Knowit.Grpc.Client
 
         public static void AddGrpcClientConfiguration<T>(
             this IServiceCollection services,
-            Action<GrpcClientFactoryOptions> action)
+            Action<GrpcClientFactoryOptions> action = null)
             where T : ClientBase<T> =>
             services.AddGrpcClientConfiguration<T>(null, action);
 
         public static void AddGrpcClientConfiguration<T>(
             this IServiceCollection services,
-            string configName = null,
+            string name = null,
             Action<GrpcClientFactoryOptions> action = null)
             where T : ClientBase<T>
         {
@@ -29,45 +30,41 @@ namespace Knowit.Grpc.Client
                 throw new ArgumentNullException(nameof(services));
             }
 
+            if (name == null)
+            {
+                name = new Regex("Client$")
+                    .Replace(typeof(T).Name, "");
+            }
+
             if (action == null)
             {
                 action = _ => { };
             }
-
-            var type = typeof(T);
-            var name = (type.Namespace != null ? $"{type.Namespace}." : "") +
-                       type.Name +
-                       (configName != null ? $", {configName}" : "");
             
-            if (configName == null)
-            {
-                configName = new Regex("Client$")
-                    .Replace(typeof(T).Name, "");
-            }
-
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            
             services
                 .AddOptions<GrpcClientOptions>(name)
                 .Configure<IConfiguration>((options, configuration) =>
                 {
-                    var section = configuration.GetSection($"{ConfigurationSection}:{configName}");
+                    var section = configuration.GetSection($"{ConfigurationSection}:{name}");
                     options.Address = section.Value;
-                    section.Bind(options);
                 });
 
-            
-            services.AddGrpcClient<T>(name, (provider, options) =>
+
+            services.AddGrpcClient<T>((provider, factoryOptions) =>
             {
                 var monitor = provider.GetService<IOptionsMonitor<GrpcClientOptions>>();
-                var grpcOptions = monitor.Get(name);
+                var clientOptions = monitor.Get(name);
 
-                if (grpcOptions.Address != null)
+                if (clientOptions.Address != null)
                 {
                     var address = new Regex(@"^(?!\w+:\/\/)")
-                        .Replace(grpcOptions.Address, "http://");
-                    options.BaseAddress = new Uri(address);
+                        .Replace(clientOptions.Address, "http://");
+                    factoryOptions.BaseAddress = new Uri(address);
                 }
 
-                action(options);
+                action(factoryOptions);
             });
         }
     }
