@@ -57,8 +57,8 @@ namespace Knowit.Grpc.Client
             
             services.AddGrpcClient<T>(name, (provider, options) =>
             {
-                var snapshot = provider.GetService<IOptionsSnapshot<GrpcClientOptions>>();
-                var grpcOptions = snapshot.Get(name);
+                var monitor = provider.GetService<IOptionsMonitor<GrpcClientOptions>>();
+                var grpcOptions = monitor.Get(name);
 
                 if (grpcOptions.Address != null)
                 {

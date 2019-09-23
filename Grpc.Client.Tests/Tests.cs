@@ -21,8 +21,8 @@ namespace Knowit.Grpc.Client.Tests
         [TestCase("EchoClient, Structured", ExpectedResult = "structured.address")]
         public string TestClientAddress(string name)
         {
-            var snapshot = Services.GetService<IOptionsSnapshot<GrpcClientFactoryOptions>>();
-            var options = snapshot.Get(name);
+            var monitor = Services.GetService<IOptionsMonitor<GrpcClientFactoryOptions>>();
+            var options = monitor.Get(name);
             return options.BaseAddress.Host;
         }
 
