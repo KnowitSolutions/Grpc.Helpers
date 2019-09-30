@@ -24,7 +24,7 @@ namespace Knowit.Grpc.Web.Tests
 
             var exception = Assert.ThrowsAsync<RpcException>(() =>
                 client.PostGrpcWebAsync<Empty, Empty>(uri, request));
-            Assert.AreEqual(StatusCode.Unimplemented, exception.StatusCode);
+            Assert.AreEqual(StatusCode.Unimplemented, exception.StatusCode, exception.Message);
         }
 
         [Test]

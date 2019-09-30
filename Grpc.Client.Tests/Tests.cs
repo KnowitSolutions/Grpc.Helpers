@@ -40,7 +40,7 @@ namespace Knowit.Grpc.Client.Tests
             services.AddGrpc(ConfigureGrpc);
             services.AddGrpcClientConfiguration<Echo.EchoClient>(options =>
             {
-                options.BaseAddress = new Uri($"http://{EndPoint}");
+                options.Address = new Uri($"http://{EndPoint}");
             });
         }
     }

@@ -25,7 +25,7 @@ namespace Knowit.Grpc.Validation.Tests
         {
             var request = new BytesValue {Value = ByteString.Empty};
             var exception = Assert.Throws<RpcException>(() => Client.Bytes(request));
-            Assert.AreEqual(StatusCode.InvalidArgument, exception.StatusCode);
+            Assert.AreEqual(StatusCode.InvalidArgument, exception.StatusCode, exception.Message);
         }
         
         protected override void ConfigureGrpc(GrpcServiceOptions options)

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Grpc.Core;
 using Grpc.Net.ClientFactory;
@@ -15,7 +14,7 @@ namespace Knowit.Grpc.Client
 
         public static void AddGrpcClientConfiguration<T>(
             this IServiceCollection services,
-            Action<GrpcClientFactoryOptions> action = null)
+            Action<GrpcClientFactoryOptions> action)
             where T : ClientBase<T> =>
             services.AddGrpcClientConfiguration<T>(null, action);
 
@@ -61,7 +60,7 @@ namespace Knowit.Grpc.Client
                 {
                     var address = new Regex(@"^(?!\w+:\/\/)")
                         .Replace(clientOptions.Address, "http://");
-                    factoryOptions.BaseAddress = new Uri(address);
+                    factoryOptions.Address = new Uri(address);
                 }
 
                 action(factoryOptions);

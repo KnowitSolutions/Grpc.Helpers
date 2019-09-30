@@ -55,6 +55,7 @@ namespace Knowit.Grpc.Web
             var formatPostfix = format != null ? $"+{format}" : "";
             
             context.Features.Set<IHttpResponseTrailersFeature>(this);
+            context.Request.Protocol = "HTTP/2";
             context.Request.ContentType = $"application/grpc{formatPostfix}";
             context.Response.OnStarting(() =>
             {
