@@ -22,7 +22,7 @@ namespace Knowit.Grpc.Web
             do
             {
                 result = await input.ReadAsync();
-                var outputMemory = output.GetMemory((int) base64.RequiredBufferSize(result.Buffer.Length));
+                var outputMemory = output.GetMemory((int) base64.RequiredBufferSize(result.Buffer.Length) + 1);
                 
                 long written = 0;
                 outputMemory.Span[0] = @byte;

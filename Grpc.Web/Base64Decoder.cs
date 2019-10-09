@@ -34,7 +34,7 @@ namespace Knowit.Grpc.Web
 
                 case SecondByte:
                     if (!TryGetNextByte(input, remaining, out @byte)) return SecondByte;
-                    if (@byte == Padding) goto case FirstPadding;
+                    if (@byte == Padding) goto case SecondPadding;
 
                     output[0] |= (byte) ((@byte & 0b00110000) >> 4);
                     output[1] = (byte) ((@byte & 0b00001111) << 4);
