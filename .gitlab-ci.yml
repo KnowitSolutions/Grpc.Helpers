@@ -6,6 +6,15 @@
     paths:
       - '*.nupkg'
 
+Grpc.Backoff:
+  extends: .build
+  variables:
+    VERSION: '0.9'
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Grpc.Backoff/**/*
+
 Grpc.Client:
   extends: .build
   variables:
