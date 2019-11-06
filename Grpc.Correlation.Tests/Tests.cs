@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.AspNetCore.Server;
 using Grpc.Core;
+using Grpc.Net.ClientFactory;
 using Knowit.Grpc.Testing;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -20,7 +22,7 @@ namespace Knowit.Grpc.Correlation.Tests
     {
         private List<LogEvent> _logEvents;
 
-        private Guid CorrelationId => Services.GetService<CorrelationId>().Value;
+        private Guid CorrelationId => Services.GetRequiredService<CorrelationId>().Value;
 
         [Test]
         public void TestBlockingInterception()
@@ -58,12 +60,20 @@ namespace Knowit.Grpc.Correlation.Tests
         }
 
         [SetUp]
-        public void Setup() =>_logEvents = new List<LogEvent>();
+        public void Setup() => _logEvents = new List<LogEvent>();
+        
+        public void Emit(LogEvent logEvent) => _logEvents.Add(logEvent);
 
         protected override void ConfigureHost(IHostBuilder host) => host
             .UseSerilog((context, configuration) => configuration
                 .Enrich.FromLogContext()
                 .WriteTo.Sink(this));
+
+        protected override void Configure(IApplicationBuilder app)
+        {
+            app.UseCorrelationId();
+            base.Configure(app);
+        }
 
         protected override void ConfigureServices(IServiceCollection services)
         {
@@ -71,10 +81,8 @@ namespace Knowit.Grpc.Correlation.Tests
             services.AddCorrelationId();
         }
 
-        protected override void ConfigureGrpc(GrpcServiceOptions options) => options
-            .AddCorrelationId();
-
-        public void Emit(LogEvent logEvent) => _logEvents.Add(logEvent);
+        protected override void ConfigureGrpcClient(IHttpClientBuilder client) =>
+            client.AddCorrelationId();
     }
 
     public class Service : Echo.EchoBase

@@ -30,6 +30,10 @@ EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kestrel.ProtocolMultiplexing.Tests", "Kestrel.ProtocolMultiplexing.Tests\Kestrel.ProtocolMultiplexing.Tests.csproj", "{FCAD7915-F916-4640-9653-8ADE7ED97591}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Backoff", "Grpc.Backoff\Grpc.Backoff.csproj", "{6D827AC8-A570-45E4-AB9A-AF14856AD04D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Backoff.Tests", "Grpc.Backoff.Tests\Grpc.Backoff.Tests.csproj", "{6ACE547B-750C-4462-9DDC-ACE33A4F84E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,5 +88,13 @@ Global
 		{FCAD7915-F916-4640-9653-8ADE7ED97591}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCAD7915-F916-4640-9653-8ADE7ED97591}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCAD7915-F916-4640-9653-8ADE7ED97591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D827AC8-A570-45E4-AB9A-AF14856AD04D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D827AC8-A570-45E4-AB9A-AF14856AD04D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D827AC8-A570-45E4-AB9A-AF14856AD04D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D827AC8-A570-45E4-AB9A-AF14856AD04D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ACE547B-750C-4462-9DDC-ACE33A4F84E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ACE547B-750C-4462-9DDC-ACE33A4F84E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ACE547B-750C-4462-9DDC-ACE33A4F84E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ACE547B-750C-4462-9DDC-ACE33A4F84E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +36,7 @@ namespace Knowit.Grpc.Testing
                     .ConfigureLogging(ConfigureLogging)
                     .ConfigureServices(ConfigureServices)
                     .ConfigureKestrel(ConfigureKestrel));
-            
+
             ConfigureHost(hostBuilder);
             _host = hostBuilder.Build();
             await _host.StartAsync();
@@ -55,6 +56,10 @@ namespace Knowit.Grpc.Testing
         {
             _scope = _host.Services.CreateScope();
             Services = _scope.ServiceProvider;
+
+            var accessor = _host.Services.GetRequiredService<IHttpContextAccessor>();
+            var context = new DefaultHttpContext {RequestServices = Services};
+            accessor.HttpContext = context;
         }
 
         [TearDown]
@@ -84,6 +89,7 @@ namespace Knowit.Grpc.Testing
 
         protected virtual void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
         }
 
         protected virtual void ConfigureKestrel(KestrelServerOptions options)

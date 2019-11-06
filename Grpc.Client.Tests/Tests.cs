@@ -37,6 +37,8 @@ namespace Knowit.Grpc.Client.Tests
 
         protected override void ConfigureServices(IServiceCollection services)
         {
+            base.ConfigureServices(services);
+            
             services.AddGrpc(ConfigureGrpc);
             services.AddGrpcClientConfiguration<Echo.EchoClient>(options =>
             {

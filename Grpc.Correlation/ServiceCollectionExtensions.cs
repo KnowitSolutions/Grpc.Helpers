@@ -1,5 +1,4 @@
 using System;
-using Grpc.Core.Interceptors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Knowit.Grpc.Correlation
@@ -13,8 +12,9 @@ namespace Knowit.Grpc.Correlation
                 throw new ArgumentNullException(nameof(services));
             }
             
+            services.AddHttpContextAccessor();
             services.AddScoped<CorrelationId>();
-            services.AddScoped<Interceptor, CorrelationIdInterceptor>();
+            services.AddSingleton<CorrelationIdInterceptor>();
         }
     }
 }
