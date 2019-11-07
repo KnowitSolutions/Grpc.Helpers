@@ -10,12 +10,6 @@ namespace Knowit.Kestrel.ProtocolMultiplexing.Tests
 {
     public class Tests : HostTests
     {
-        [OneTimeSetUp]
-        public void EnableHttp2()
-        {
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-        }
-        
         [Test]
         [TestCase(1, 1)]
         [TestCase(2, 0)]

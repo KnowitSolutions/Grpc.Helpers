@@ -17,9 +17,6 @@ namespace Knowit.Grpc.Testing
         where TClient : ClientBase<TClient>
         where TService : class
     {
-        static ServiceTests() =>
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-
         protected TClient Client { get; private set; }
 
         [SetUp]

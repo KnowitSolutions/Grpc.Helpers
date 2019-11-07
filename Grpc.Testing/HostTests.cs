@@ -17,6 +17,9 @@ namespace Knowit.Grpc.Testing
 {
     public class HostTests
     {
+        static HostTests() =>
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+        
         private IHost _host;
         private IServerAddressesFeature _addresses;
         private IServiceScope _scope;
