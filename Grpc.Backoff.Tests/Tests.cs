@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Knowit.Grpc.Correlation;
 using Knowit.Grpc.Testing;
 using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +32,7 @@ namespace Knowit.Grpc.Backoff.Tests
         }
 
         protected override void ConfigureGrpcClient(IHttpClientBuilder client) => 
-            client.AddExponentialBackoff(1000, 3);
+            client.AddExponentialBackoff(3, 1000);
     }
 
     public class Service : Echo.EchoBase {

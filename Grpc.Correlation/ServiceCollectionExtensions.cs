@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Knowit.Grpc.Correlation
 {
@@ -13,8 +14,8 @@ namespace Knowit.Grpc.Correlation
             }
             
             services.AddHttpContextAccessor();
-            services.AddScoped<CorrelationId>();
-            services.AddSingleton<CorrelationIdInterceptor>();
+            services.TryAddScoped<CorrelationId>();
+            services.TryAddSingleton<CorrelationIdInterceptor>();
         }
     }
 }

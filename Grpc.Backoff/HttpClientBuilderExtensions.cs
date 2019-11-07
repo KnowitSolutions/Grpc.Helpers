@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Knowit.Grpc.Backoff
 {
-    public static class GrpcServiceOptionsExtensions
+    public static class HttpClientBuilderExtensions
     {
-        public static void AddExponentialBackoff(this IHttpClientBuilder client, int retryInterval, int retryCount, bool retryForever = false)
+        public static void AddExponentialBackoff(this IHttpClientBuilder client,  int retryCount, int retryInterval = 0, bool retryForever = false)
         {
             if (client == null)
             {
@@ -17,12 +17,11 @@ namespace Knowit.Grpc.Backoff
             client.AddInterceptor(services =>
             {
                 var interceptor = services.GetRequiredService<ExponentialBackoffInterceptor>();
-                interceptor.RetryInterval = retryInterval;
                 interceptor.RetryCount = retryCount;
+                interceptor.RetryInterval = retryInterval;
                 interceptor.RetryForever = retryForever;
                 return interceptor;
             });
-            client.AddInterceptor<ExponentialBackoffInterceptor>();
         }
     }
 }

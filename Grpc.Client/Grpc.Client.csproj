@@ -16,4 +16,9 @@
         <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.23.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Grpc.Backoff\Grpc.Backoff.csproj" />
+      <ProjectReference Include="..\Grpc.Correlation\Grpc.Correlation.csproj" />
+    </ItemGroup>
+
 </Project>

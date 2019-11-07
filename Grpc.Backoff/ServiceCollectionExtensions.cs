@@ -1,8 +1,8 @@
 using System;
-using Knowit.Grpc.Backoff;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Knowit.Grpc.Correlation
+namespace Knowit.Grpc.Backoff
 {
     public static class ServiceCollectionExtensions
     {
@@ -13,7 +13,7 @@ namespace Knowit.Grpc.Correlation
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddSingleton<ExponentialBackoffInterceptor>();
+            services.TryAddSingleton<ExponentialBackoffInterceptor>();
         }
     }
 }

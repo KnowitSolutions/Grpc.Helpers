@@ -2,9 +2,11 @@ using System;
 using System.Text.RegularExpressions;
 using Grpc.Core;
 using Grpc.Net.ClientFactory;
+using Knowit.Grpc.Backoff;
+using Knowit.Grpc.Correlation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Knowit.Grpc.Client
 {
@@ -12,13 +14,13 @@ namespace Knowit.Grpc.Client
     {
         private const string ConfigurationSection = "Grpc:Clients";
 
-        public static void AddGrpcClientConfiguration<T>(
+        public static void AddGrpcClient<T>(
             this IServiceCollection services,
             Action<GrpcClientFactoryOptions> action)
             where T : ClientBase<T> =>
-            services.AddGrpcClientConfiguration<T>(null, action);
+            services.AddGrpcClient<T>(null, action);
 
-        public static void AddGrpcClientConfiguration<T>(
+        public static void AddGrpcClient<T>(
             this IServiceCollection services,
             string name = null,
             Action<GrpcClientFactoryOptions> action = null)
@@ -40,30 +42,20 @@ namespace Knowit.Grpc.Client
                 action = _ => { };
             }
             
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            services.TryAddSingleton<Client>();
+            services.AddCorrelationId();
+            services.AddBackoff();
             
             services
                 .AddOptions<GrpcClientOptions>(name)
-                .Configure<IConfiguration>((options, configuration) =>
-                {
-                    var section = configuration.GetSection($"{ConfigurationSection}:{name}");
-                    options.Address = section.Value;
-                });
+                .Configure<IConfiguration>((options, config) => 
+                    config.GetSection($"{ConfigurationSection}:{name}").Bind(options));
 
 
-            services.AddGrpcClient<T>((provider, factoryOptions) =>
+            services.AddGrpcClient<T>((provider, client) =>
             {
-                var monitor = provider.GetService<IOptionsMonitor<GrpcClientOptions>>();
-                var clientOptions = monitor.Get(name);
-
-                if (clientOptions.Address != null)
-                {
-                    var address = new Regex(@"^(?!\w+:\/\/)")
-                        .Replace(clientOptions.Address, "http://");
-                    factoryOptions.Address = new Uri(address);
-                }
-
-                action(factoryOptions);
+                provider.GetRequiredService<Client>().Configure(name, client);
+                action(client);
             });
         }
     }

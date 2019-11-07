@@ -12,8 +12,8 @@ namespace Knowit.Grpc.Backoff
         private readonly Random _random = new Random();
 
 
-        internal int RetryInterval { private get; set; }
         internal int RetryCount { private get; set; }
+        internal int RetryInterval { private get; set; }
         internal bool RetryForever { private get; set; }
 
         public ExponentialBackoffInterceptor(ILogger<ExponentialBackoffInterceptor> logger)

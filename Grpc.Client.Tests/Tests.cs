@@ -20,18 +20,24 @@ namespace Knowit.Grpc.Client.Tests
         }
 
         [Test]
-        public void TestAddress()
+        public void TestConfig()
         {
             var monitor = Services.GetRequiredService<IOptionsMonitor<GrpcClientOptions>>();
             var options = monitor.Get("Echo");
             Assert.AreEqual("echo.address",options.Address);
+            Assert.AreEqual(3,options.RetryCount);
+            Assert.AreEqual(1000,options.RetryInterval);
+            Assert.AreEqual(true,options.RetryForever);
         }
 
         protected override void ConfigureAppConfiguration(IConfigurationBuilder configuration)
         {
             configuration.AddInMemoryCollection(new Dictionary<string, string>
             {
-                {"Grpc:Clients:Echo", "echo.address"}
+                {"Grpc:Clients:Echo:Address", "echo.address"},
+                {"Grpc:Clients:Echo:RetryCount", "3"},
+                {"Grpc:Clients:Echo:RetryInterval", "1000"},
+                {"Grpc:Clients:Echo:RetryForever", "true"}
             });
         }
 
@@ -40,7 +46,7 @@ namespace Knowit.Grpc.Client.Tests
             base.ConfigureServices(services);
             
             services.AddGrpc(ConfigureGrpc);
-            services.AddGrpcClientConfiguration<Echo.EchoClient>(options =>
+            services.AddGrpcClient<Echo.EchoClient>(options =>
             {
                 options.Address = new Uri($"http://{EndPoint}");
             });
