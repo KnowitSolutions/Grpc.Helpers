@@ -19,41 +19,36 @@ namespace Knowit.Grpc.Correlation
         public override TResponse BlockingUnaryCall<TRequest, TResponse>(
             TRequest request,
             ClientInterceptorContext<TRequest, TResponse> context,
-            BlockingUnaryCallContinuation<TRequest, TResponse> continuation)
-        {
-            var correlationId = _context.HttpContext.RequestServices.GetRequiredService<CorrelationId>();
-
-            if (correlationId.Value == Guid.Empty)
-            {
-                correlationId.Value = Guid.NewGuid();
-            }
-
-            var headers = context.Options.Headers ?? new Metadata();
-            headers.Add(HeaderName, correlationId.Value.ToString());
-            context = new ClientInterceptorContext<TRequest, TResponse>(
-                context.Method, context.Host, context.Options.WithHeaders(headers));
-
-            return continuation(request, context);
-        }
+            BlockingUnaryCallContinuation<TRequest, TResponse> continuation) =>
+            continuation(request, SetHeader(context));
 
         public override AsyncUnaryCall<TResponse> AsyncUnaryCall<TRequest, TResponse>(
             TRequest request,
             ClientInterceptorContext<TRequest, TResponse> context,
-            AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
-        {
-            var correlationId = _context.HttpContext.RequestServices.GetRequiredService<CorrelationId>();
+            AsyncUnaryCallContinuation<TRequest, TResponse> continuation) =>
+            continuation(request, SetHeader(context));
 
-            if (correlationId.Value == Guid.Empty)
+        private ClientInterceptorContext<TRequest, TResponse> SetHeader<TRequest, TResponse>(
+            ClientInterceptorContext<TRequest, TResponse> context)
+            where TRequest : class
+            where TResponse : class
+        {
+            var correlationId = _context
+                .HttpContext?
+                .RequestServices
+                .GetService<CorrelationId>()?
+                .Value;
+            
+            if (correlationId == null || correlationId == Guid.Empty)
             {
-                correlationId.Value = Guid.NewGuid();
+                correlationId = Guid.NewGuid();
             }
 
             var headers = context.Options.Headers ?? new Metadata();
-            headers.Add(HeaderName, correlationId.Value.ToString());
-            context = new ClientInterceptorContext<TRequest, TResponse>(
+            headers.Add(HeaderName, correlationId.ToString());
+            
+            return new ClientInterceptorContext<TRequest, TResponse>(
                 context.Method, context.Host, context.Options.WithHeaders(headers));
-
-            return continuation(request, context);
         }
 
         // TODO: All the streaming interceptors

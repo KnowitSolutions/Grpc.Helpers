@@ -59,7 +59,7 @@ namespace Knowit.Grpc.Backoff
                     exception.StatusCode == StatusCode.Internal ||
                     exception.StatusCode == StatusCode.Unavailable)
                 {
-                    _logger.LogWarning(exception, "asdasdasdasdasdasdadadasd");
+                    _logger.LogWarning(exception, "");
                     call.Dispose();
 
                     attempt++;

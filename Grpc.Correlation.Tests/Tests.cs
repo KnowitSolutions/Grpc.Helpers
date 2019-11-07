@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
-using Grpc.AspNetCore.Server;
 using Grpc.Core;
-using Grpc.Net.ClientFactory;
 using Knowit.Grpc.Testing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,12 +19,9 @@ namespace Knowit.Grpc.Correlation.Tests
     {
         private List<LogEvent> _logEvents;
 
-        private Guid CorrelationId => Services.GetRequiredService<CorrelationId>().Value;
-
         [Test]
         public void TestBlockingInterception()
         {
-            AssertEmpty();
             Client.Empty(new Empty());
             AssertPopulated();
         }
@@ -35,20 +29,12 @@ namespace Knowit.Grpc.Correlation.Tests
         [Test]
         public async Task TestAsyncInterception()
         {
-            AssertEmpty();
             await Client.EmptyAsync(new Empty());
             AssertPopulated();
         }
 
-        private void AssertEmpty()
-        {
-            Assert.AreEqual(Guid.Empty, CorrelationId);
-        }
-
         private void AssertPopulated()
         {
-            Assert.AreEqual(SideChannel.correlationId, CorrelationId);
-
             var logEvent = _logEvents.FirstOrDefault(@event => @event.MessageTemplate.Text == "Message");
             Assert.NotNull(logEvent);
             
