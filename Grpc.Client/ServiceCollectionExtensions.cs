@@ -14,6 +14,9 @@ namespace Knowit.Grpc.Client
     {
         private const string ConfigurationSection = "Grpc:Clients";
 
+        static ServiceCollectionExtensions() =>
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
         public static void AddConfigurableGrpcClient<T>(
             this IServiceCollection services,
             Action<GrpcClientFactoryOptions> action)
@@ -41,14 +44,14 @@ namespace Knowit.Grpc.Client
             {
                 action = _ => { };
             }
-            
+
             services.TryAddSingleton<Client>();
             services.AddCorrelationId();
             services.AddBackoff();
-            
+
             services
                 .AddOptions<GrpcClientOptions>(name)
-                .Configure<IConfiguration>((options, config) => 
+                .Configure<IConfiguration>((options, config) =>
                     config.GetSection($"{ConfigurationSection}:{name}").Bind(options));
 
 

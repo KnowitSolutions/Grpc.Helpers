@@ -12,9 +12,6 @@ namespace Knowit.Grpc.Client
         private readonly IOptionsMonitor<GrpcClientOptions> _options;
         private readonly IServiceProvider _services;
 
-        static Client() => 
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-
         public Client(IOptionsMonitor<GrpcClientOptions> options, IServiceProvider services)
         {
             _options = options;
