@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
@@ -48,6 +49,7 @@ namespace Knowit.Grpc.Backoff
             while (true)
             {
                 var call = continuation();
+                attempt++;
 
                 try
                 {
@@ -55,17 +57,18 @@ namespace Knowit.Grpc.Backoff
                     headers.SetResult(await call.ResponseHeadersAsync);
                     return result;
                 }
-                catch (RpcException exception) when (
-                    exception.StatusCode == StatusCode.Internal ||
-                    exception.StatusCode == StatusCode.Unavailable)
+                catch (Exception exception) when (
+                    exception is RpcException rpcException &&
+                    (rpcException.StatusCode == StatusCode.Internal || 
+                     rpcException.StatusCode == StatusCode.Unavailable) ||
+                    exception is HttpRequestException)
                 {
-                    _logger.LogWarning(exception, "");
-                    call.Dispose();
-
-                    attempt++;
                     if (RetryForever) attempt = Math.Min(RetryCount, attempt);
                     else if (attempt >= RetryCount) throw;
+                    _logger.LogWarning(exception, "");
                 }
+                
+                call.Dispose();
                 
                 var backoff =  _random.Next(Pow(2, attempt));
                 var sleep = RetryInterval * backoff;
