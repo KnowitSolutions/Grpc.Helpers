@@ -23,7 +23,9 @@ Grpc.Client:
   only:
     changes:
       - .gitlab-ci.yml
+      - Grpc.Backoff/**/*
       - Grpc.Client/**/*
+      - Grpc.Correlation/**/*
 
 Grpc.Correlation:
   extends: .build
