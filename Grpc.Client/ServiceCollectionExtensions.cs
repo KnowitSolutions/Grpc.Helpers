@@ -14,13 +14,13 @@ namespace Knowit.Grpc.Client
     {
         private const string ConfigurationSection = "Grpc:Clients";
 
-        public static void AddGrpcClient<T>(
+        public static void AddConfigurableGrpcClient<T>(
             this IServiceCollection services,
             Action<GrpcClientFactoryOptions> action)
             where T : ClientBase<T> =>
-            services.AddGrpcClient<T>(null, action);
+            services.AddConfigurableGrpcClient<T>(null, action);
 
-        public static void AddGrpcClient<T>(
+        public static void AddConfigurableGrpcClient<T>(
             this IServiceCollection services,
             string name = null,
             Action<GrpcClientFactoryOptions> action = null)

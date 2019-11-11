@@ -46,7 +46,7 @@ namespace Knowit.Grpc.Client.Tests
             base.ConfigureServices(services);
             
             services.AddGrpc(ConfigureGrpc);
-            services.AddGrpcClient<Echo.EchoClient>(options =>
+            services.AddConfigurableGrpcClient<Echo.EchoClient>(options =>
             {
                 options.Address = new Uri($"http://{EndPoint}");
             });
