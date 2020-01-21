@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <OutputType>Library</OutputType>
         <IsPackable>true</IsPackable>
         <AssemblyName>Knowit.Grpc.Backoff</AssemblyName>
@@ -12,8 +12,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Grpc.AspNetCore.Server" Version="2.23.2" />
-      <PackageReference Include="Grpc.Net.ClientFactory" Version="2.23.2" />
+      <PackageReference Include="Grpc.AspNetCore.Server" Version="2.26.0" />
+      <PackageReference Include="Grpc.Net.ClientFactory" Version="2.26.0" />
     </ItemGroup>
 
 </Project>
