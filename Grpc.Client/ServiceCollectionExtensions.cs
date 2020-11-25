@@ -23,7 +23,7 @@ namespace Knowit.Grpc.Client
             where T : ClientBase<T> =>
             services.AddConfigurableGrpcClient<T>(null, action);
 
-        public static void AddConfigurableGrpcClient<T>(
+        public static IHttpClientBuilder AddConfigurableGrpcClient<T>(
             this IServiceCollection services,
             string name = null,
             Action<GrpcClientFactoryOptions> action = null)
@@ -55,7 +55,7 @@ namespace Knowit.Grpc.Client
                     config.GetSection($"{ConfigurationSection}:{name}").Bind(options));
 
 
-            services.AddGrpcClient<T>((provider, client) =>
+            return services.AddGrpcClient<T>((provider, client) =>
             {
                 provider.GetRequiredService<Client>().Configure(name, client);
                 action(client);
