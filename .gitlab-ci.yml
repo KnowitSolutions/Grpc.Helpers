@@ -19,7 +19,7 @@ Grpc.Backoff:
 Grpc.Client:
   extends: .build
   variables:
-    VERSION: '0.10'
+    VERSION: '0.9'
   only:
     changes:
       - .gitlab-ci.yml
