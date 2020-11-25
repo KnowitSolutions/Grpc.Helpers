@@ -19,7 +19,7 @@ Grpc.Backoff:
 Grpc.Client:
   extends: .build
   variables:
-    VERSION: '0.9'
+    VERSION: '0.10'
   only:
     changes:
       - .gitlab-ci.yml
@@ -76,13 +76,14 @@ Kestrel.ProtocolMultiplexing:
 deploy:
   stage: deploy
   image: mcr.microsoft.com/dotnet/core/sdk:3.1
-  only: [master]
+  only:
+    refs:
+      - master
+    changes:
+      - .gitlab-ci.yml
+      - '*/**/*'
   script:
     for package in *.nupkg;
     do
       dotnet nuget push "$package" --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY;
     done
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - '*/**/*'
